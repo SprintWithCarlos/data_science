@@ -8,7 +8,9 @@
   "postCreateCommand": "",
   "customizations": {
     "codespaces": {
-      "openFiles": []
+      "openFiles": [
+        "index.md"
+      ]
     },
     "vscode": {
       "extensions": [
