@@ -14,7 +14,7 @@ La tabla debe tener 4 columnas:
 Si no tienes el archivo, puedes generar uno con data simulada, siguiendo las instrucciones del cuaderno
 ## Siguiente paso: ejecuta el cuaderno
 La opción recomendada es en Codespaces, sólo haz click en el botón y sigue las instrucciones
-[![Abrir en Codespaces](badge_es.svg)](https://codespaces.new?repo=SprintWithCarlos/van_westendorp)
+[![Abrir en Codespaces](badge_es.svg)](https://codespaces.new?repo=SprintWithCarlos/data_science)
 
 Si prefieres ejecutarlo en local, clona el repositorio e instala las dependencias
 ```bash
