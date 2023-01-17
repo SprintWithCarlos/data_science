@@ -6,6 +6,19 @@
   },
   "waitFor": "onCreateCommand",
   "updateContentCommand": "python3 -m pip install -r requirements.txt",
+  "runArgs": [
+    "--mount",
+    "type=bind,source=$LOCALAPPDATA/VirtualEnvs/data_science,target=/venv",
+    "--env",
+    "VIRTUAL_ENV=/venv",
+    "-e",
+    "VIRTUAL_ENV=/venv",
+    "--entrypoint",
+    "sh",
+    "--cmd",
+    "-c",
+    "source /venv/bin/activate"
+  ],
   "customizations": {
     "codespaces": {
       "openFiles": [
