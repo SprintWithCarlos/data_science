@@ -1,21 +1,32 @@
-from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api import YouTubeTranscriptApi, _errors
 import os
 import openai
-from pytube import YouTube
+
+from dotenv import load_dotenv
+from pytube import YouTube, exceptions
+load_dotenv()
 
 
-def summarize(url, api_key, language="en"):
+def summarize(url, language="en"):
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
-
     filename = os.path.join(current_dir, "summary.md")
     language_array = [language]
-    os.environ["OPENAI_API_KEY"] = api_key
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    yt = YouTube(url)
-    title = yt.title
-    author = yt.author
-    video_id = url.split("=")[1]
+    openai.api_key = os.getenv("OPENAI_API")
     try:
+        yt = YouTube(url)
+
+        title = yt.title
+        author = yt.author
+        if "&" in url:
+            url = url.split("&")[0]
+
+        if ".be" in url:
+            video_id = url.split("/")[-1]
+
+        else:
+            video_id = url.split("=")[1]
+
         transcription = YouTubeTranscriptApi.get_transcript(
             video_id, language_array)
         data = [f'Transcript of "{title.lower()}" by {author}:']
@@ -74,10 +85,13 @@ Link: [{url}]({url})
         sentence = "".join(new_array)
         with open(filename, "w") as f:
             f.write(sentence)
-    except Exception as e:
-        lines = str(e).splitlines()
-        lines_array = []
-        for i in range(12):
-            lines_array.append(lines[i])
-        message = """ """.join(list(lines_array))
-        return (f"""An error occurred: {message}""")
+    except _errors.NoTranscriptFound:
+        return "Error: no transcript on selected language. Check language"
+    except exceptions.RegexMatchError:
+        return "Error: check url"
+    except openai.error.RateLimitError:
+        return "Error: You have exceeded OpenAI requests. Try again later"
+    except openai.error.AuthenticationError:
+        return "Error: check OpenAI API key"
+    except openai.error.ServiceUnavailableError:
+        return "Error: OpenAI servers are saturated, try again later"

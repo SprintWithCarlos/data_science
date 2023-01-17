@@ -7,8 +7,8 @@ from pytube import YouTube, exceptions
 load_dotenv()
 
 
-def summarize(url, language="en"):
-    filename = "summary.md"
+def resumir(url, language="es"):
+    filename = "resumen.md"
     language_array = [language]
     openai.api_key = os.getenv("OPENAI_API")
     try:
@@ -27,7 +27,7 @@ def summarize(url, language="en"):
 
         transcription = YouTubeTranscriptApi.get_transcript(
             video_id, language_array)
-        data = [f'Transcript of "{title.lower()}" by {author}:']
+        data = [f'Transcripción de "{title.lower()}". Autoría: {author}:']
         for item in transcription:
             data.append(item['text'].lower())
         max_chunk_length = 2048
@@ -71,11 +71,11 @@ def summarize(url, language="en"):
         )
         executive_summary = response["choices"][0]["text"].replace(": ", "")
         new_array = [
-            f"""# Transcript of "{title.capitalize()}" by {author.capitalize()}
+            f"""# Transcripción de "{title.capitalize()}". Autoría {author.capitalize()}
 Link: [{url}]({url})
-## Executive Summary:
+## Resumen:
 {executive_summary}
-## Main Takeaways:
+## Puntos Principales:
   """]
         for i, item in enumerate(summary_responses):
             new_item = item.replace(": ", "").replace("\n", "")
@@ -84,12 +84,12 @@ Link: [{url}]({url})
         with open(filename, "w") as f:
             f.write(sentence)
     except _errors.NoTranscriptFound:
-        return "Error: no transcript on selected language. Check language"
+        return "Ha ocurrido un error: no hay transcripción en el idioma seleccionado. Verifica idioma"
     except exceptions.RegexMatchError:
-        return "Error: check url"
+        return "Ha ocurrido un error: verifica la url introducida"
     except openai.error.RateLimitError:
-        return "Error: You have exceeded OpenAI requests. Try again later"
+        return "Ha ocurrido un error: has superado el límite de peticiones a OpenAI. Intenta más tarde"
     except openai.error.AuthenticationError:
-        return "Error: check OpenAI API key"
+        return "Ha ocurrido un error: verifica la clave de OpenAI"
     except openai.error.ServiceUnavailableError:
-        return "Error: OpenAI servers are saturated, try again later"
+        return "Ha ocurrido un error: los servidores de OpenAI están saturados, intenta más tarde"
