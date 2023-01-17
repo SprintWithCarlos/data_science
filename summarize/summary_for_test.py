@@ -5,7 +5,9 @@ from pytube import YouTube
 
 
 def summarize(url, api_key, language="en"):
-    filename = "summary.md"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    filename = os.path.join(current_dir, "summary.md")
     language_array = [language]
     os.environ["OPENAI_API_KEY"] = api_key
     openai.api_key = os.getenv("OPENAI_API_KEY")

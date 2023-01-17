@@ -1,20 +1,19 @@
-import pytest
 import os
 from mock import patch
-from summary import summarize
-import time
+from summary_for_test import summarize
+
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 filename = os.path.join(current_dir, "summary.md")
 
 
-@patch('summary.YouTubeTranscriptApi.get_transcript', return_value=[{'text': 'This is a test transcript.'}])
+@patch('summary_for_test.YouTubeTranscriptApi.get_transcript', return_value=[{'text': 'This is a test transcript.'}])
 @patch('openai.Completion.create', return_value={'choices': [{'text': 'This is a summary.'}]})
-@patch('summary.YouTube')
+@patch('summary_for_test.YouTube')
 def test_summarize(mock_youtube, mock_openai_create, mock_yt_transcripts):
     if os.path.exists(filename):
         os.remove(filename)
-        print(f"{filename} deleted!")
+        # print(f"{filename} deleted!")
     # time.sleep(5)
     # delete_file is being accessed here
 
