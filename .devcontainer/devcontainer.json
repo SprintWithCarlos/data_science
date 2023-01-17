@@ -1,22 +1,39 @@
 {
   "name": "Sprint With Carlos Soluciones Low-code",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "..",
+    "args": {
+      // Update 'VARIANT' to pick a Python version: 3, 3.10, 3.9, 3.8, 3.7, 3.6
+      // Append -bullseye or -buster to pin to an OS version.
+      // Use -bullseye variants on local on arm64/Apple Silicon.
+      "VARIANT": "3.8-bullseye",
+      // Options
+      "NODE_VERSION": "none"
+    }
+  },
   "hostRequirements": {
     "cpus": 2
   },
-  "waitFor": "onCreateCommand",
-  "updateContentCommand": "python3 -m pip install -r requirements.txt",
-  "postCreateCommand": "",
+  // Configure tool-specific properties.
   "customizations": {
     "codespaces": {
       "openFiles": [
         "index.md"
       ]
     },
+    // Configure properties specific to VS Code.
     "vscode": {
+      // Set *default* container specific settings.json values on container create.
+      "settings": {
+        "python.defaultInterpreterPath": "/home/vscode/venv/bin/python",
+        "python.linting.enabled": true,
+      },
+      // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
         "ms-toolsai.jupyter",
-        "ms-python.python"
       ]
     }
   }

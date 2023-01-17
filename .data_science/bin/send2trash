@@ -1,4 +1,4 @@
-#!/Users/LeanLawyering/dev/data_science/.data_science/bin/python
+#!/Users/LeanLawyering/dev/data_science/.data_science/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys

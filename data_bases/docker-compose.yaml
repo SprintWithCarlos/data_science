@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 5434:5432
+    environment:
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: root
+    volumes:
+      - ./postgres-volume:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: example@example.com
+      PGADMIN_DEFAULT_PASSWORD: 1234
+    ports:
+      - 8082:80
+    depends_on:
+      - postgres
