@@ -1,22 +1,4 @@
 {
-  "name": "Sprint With Carlos Soluciones Low-code",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "hostRequirements": {
-    "cpus": 2
-  },
-  "waitFor": "onCreateCommand",
-  "updateContentCommand": "python3 -m pip install -r requirements.txt",
-  "customizations": {
-    "codespaces": {
-      "openFiles": [
-        "index.md"
-      ]
-    },
-    "vscode": {
-      "extensions": [
-        "ms-toolsai.jupyter",
-        "ms-python.python"
-      ]
-    }
-  }
+	"name": "Python 3",
+	"image": "cmarchena/swc_data_science:1"
 }

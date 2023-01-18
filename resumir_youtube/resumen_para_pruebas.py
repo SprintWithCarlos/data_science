@@ -85,6 +85,8 @@ Link: [{url}]({url})
         sentence = "".join(new_array)
         with open(filename, "w") as f:
             f.write(sentence)
+    except _errors.TranscriptsDisabled:
+        return "Ha ocurrido un error: los subtítulos están deshabilitados en este vídeo. No es posible resumirlo"
     except _errors.NoTranscriptFound:
         return "Ha ocurrido un error: no hay transcripción en el idioma seleccionado. Verifica idioma"
     except exceptions.RegexMatchError:

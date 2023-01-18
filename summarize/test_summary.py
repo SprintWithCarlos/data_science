@@ -5,6 +5,7 @@ from mock import patch
 from summary_for_test import summarize
 from faker import Faker
 import openai
+import youtube_transcript_api
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -86,7 +87,7 @@ def test_summarize_openai_with_youtube_shortened_url(mock_openai):
 
 def test_summarize_exception_wrong_url():
     fake = Faker()
-    url = fake.url()
+    url = f'https//youtu.be/{fake.word()}'
     result = summarize(url)
     assert result == "Error: check url"
 
@@ -109,7 +110,7 @@ def test_summarize_exception_no_env(monkeypatch):
 
 def test_summarize_exception_rate_limit():
     url = 'https://youtu.be/e9KJ3kd80fQ'
-    with pytest.raises(openai.error.RateLimitError):
+    with pytest.raises(openai.error.RateLimitError, match="Error: You have exceeded OpenAI requests. Try again later"):
         summarize(url)
         raise openai.error.RateLimitError(
             "Error: You have exceeded OpenAI requests. Try again later")
@@ -117,7 +118,15 @@ def test_summarize_exception_rate_limit():
 
 def test_summarize_exception_service_unavailable():
     url = 'https://youtu.be/e9KJ3kd80fQ'
-    with pytest.raises(openai.error.ServiceUnavailableError):
+    with pytest.raises(openai.error.ServiceUnavailableError, match="Error: OpenAI servers are saturated, try again later"):
         summarize(url)
         raise openai.error.ServiceUnavailableError(
             "Error: OpenAI servers are saturated, try again later")
+
+
+def test_summarize_exception_transcripts_disable():
+    url = 'https://www.youtube.com/watch?v=u9NESbmj4bU'
+    with pytest.raises(youtube_transcript_api._errors.TranscriptsDisabled, match="Error: transcripts are disabled in this video. You cannot summarize it"):
+        summarize(url)
+        raise youtube_transcript_api._errors.TranscriptsDisabled(
+            "Error: transcripts are disabled in this video. You cannot summarize it")

@@ -1,4 +1,5 @@
-from youtube_transcript_api import YouTubeTranscriptApi, _errors
+import youtube_transcript_api
+from youtube_transcript_api import YouTubeTranscriptApi
 import os
 import openai
 
@@ -85,8 +86,10 @@ Link: [{url}]({url})
         sentence = "".join(new_array)
         with open(filename, "w") as f:
             f.write(sentence)
-    except _errors.NoTranscriptFound:
+    except youtube_transcript_api._errors.NoTranscriptFound:
         return "Error: no transcript on selected language. Check language"
+    except youtube_transcript_api._errors.TranscriptsDisabled:
+        return "Error: transcripts are disabled in this video. You cannot summarize it"
     except exceptions.RegexMatchError:
         return "Error: check url"
     except openai.error.RateLimitError:

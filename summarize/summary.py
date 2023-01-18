@@ -85,6 +85,8 @@ Link: [{url}]({url})
             f.write(sentence)
     except _errors.NoTranscriptFound:
         return "Error: no transcript on selected language. Check language"
+    except _errors.TranscriptsDisabled:
+        return "Error: transcripts are disabled in this video. You cannot summarize it"
     except exceptions.RegexMatchError:
         return "Error: check url"
     except openai.error.RateLimitError:
